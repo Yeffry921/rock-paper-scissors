@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rock Paper Scissors</title>
+</head>
+
+<body>
+    <script>
+        let rounds = 5;
+        let computerScore = 0;
+        let userScore = 0;
+
+        game()
+
+        function game() {
+
+            let playerChoice = prompt('rock, paper or scissors?');
+            let computerChoice = computerPlay();
+            playerChoice = playerChoice.toLowerCase()
+
+            if (playerChoice !== null) {
+                playRound(playerChoice, computerChoice);
+
+            } else {
+                alert('Please use rock paper or scissors')
+            }
+        }
+
+        function computerPlay() {
+            const randomNum = Math.floor(Math.random() * 3) + 1
+            return randomNum === 1 ? 'rock' : randomNum === 2 ? 'paper' : 'scissors';
+        }
+
+        function playRound(playerSelection, computerSelection) {
+            // playerSelection = playerSelection.toLowerCase();
+            // computerSelection = computerSelection.toLowerCase();
+
+            const losingMessage = `You have lost! ${computerSelection} beats ${playerSelection}`;
+            const winningMessage = `You have won! ${playerSelection} beats ${computerSelection}`;
+            const tiedMessage = 'The game was a tie! try again';
+            const finalWinnerMessage = 'You have won the the best of 5!'
+
+
+            if (playerSelection === 'rock') {
+                if (computerSelection === 'scissors') {
+                    alert(winningMessage);
+                    userScore += 1
+                } else if (computerSelection === 'paper') {
+                    alert(losingMessage)
+                    computerScore += 1
+                } else if (computerSelection === 'rock') {
+                    alert(tiedMessage)
+                }
+            } else if (playerSelection === 'scissors') {
+                if (computerSelection === 'rock') {
+                    alert(losingMessage)
+                    computerScore += 1
+                } else if (computerSelection === 'paper') {
+                    alert(winningMessage)
+                    userScore += 1
+                } else if (computerSelection === 'scissors') {
+                    alert(tiedMessage)
+                }
+            } else if (playerSelection === 'paper') {
+                if (computerSelection === 'rock') {
+                    alert(winningMessage)
+                    userScore += 1
+                } else if (computerSelection === 'scissors') {
+                    alert(losingMessage)
+                    computerScore += 1
+                } else if (computerSelection === 'paper') {
+                    alert(tiedMessage)
+                }
+            }
+
+            console.log(computerScore)
+            console.log(userScore)
+            rounds = rounds - 1;
+            console.log(rounds);
+
+            if (rounds >= 1) {
+                game()
+            } else if (rounds === 0) {
+                if (computerScore < userScore) {
+                    alert(`${finalWinnerMessage}`)
+                } else if (computerScore === userScore) {
+                    alert('The series was a tie overall')
+                } else {
+                    alert('You have lost')
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
