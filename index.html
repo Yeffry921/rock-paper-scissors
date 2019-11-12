@@ -36,8 +36,6 @@
         }
 
         function playRound(playerSelection, computerSelection) {
-            // playerSelection = playerSelection.toLowerCase();
-            // computerSelection = computerSelection.toLowerCase();
 
             const losingMessage = `You have lost! ${computerSelection} beats ${playerSelection}`;
             const winningMessage = `You have won! ${playerSelection} beats ${computerSelection}`;
@@ -77,11 +75,8 @@
                 }
             }
 
-            console.log(computerScore)
-            console.log(userScore)
             rounds = rounds - 1;
-            console.log(rounds);
-
+            
             if (rounds >= 1) {
                 game()
             } else if (rounds === 0) {
