@@ -75,17 +75,22 @@
                 }
             }
 
+            checkWinner(finalWinnerMessage);
+
+        }
+
+        function checkWinner(finalWinnerMessage) {
             rounds = rounds - 1;
-            
+
             if (rounds >= 1) {
-                game()
+                game();
             } else if (rounds === 0) {
                 if (computerScore < userScore) {
-                    alert(`${finalWinnerMessage}`)
+                    alert(`${finalWinnerMessage}`);
                 } else if (computerScore === userScore) {
-                    alert('The series was a tie overall')
+                    alert('The series was a tie overall');
                 } else {
-                    alert('You have lost')
+                    alert('You have lost');
                 }
             }
         }
