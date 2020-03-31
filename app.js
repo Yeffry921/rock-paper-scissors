@@ -1,94 +1,108 @@
-let computerScore = 0;
-let userScore = 0;
-const buttons = document.querySelectorAll('.btn');
-const results = document.querySelector('.results');
+const storage = {
+    computerScore: 0,
+    userScore: 0,
+    buttons: document.querySelectorAll('.btn'),
+    results: document.querySelector('.results'),
+    form: document.querySelector('form'),
+    container: document.querySelector('.container'),
+    playerName: ''
+};
+
+const ShowUI = (e) => {
+    e.preventDefault();
+    storage.container.classList.toggle('hide');
+    e.target.classList.toggle('hide');
+
+    const para = document.createElement('h3');
+    para.textContent = `Player Name: ${e.target.player.value}`;
+    storage.playerName = e.target.player.value;
+
+    document.querySelector('body').appendChild(para);
+};
 
 
-
-buttons.forEach((button) => {
+for(button of storage.buttons){
     button.addEventListener('click', (e) => {
-        game(e.target.textContent);
-    })
-})
-
-function game(playerPick) {
-    let playerChoice = playerPick.toLowerCase();
-    const computerChoice = computerPlay();
-
-    if (playerChoice !== null) {
-        playRound(playerChoice, computerChoice);
-
-    } else {
-        alert('Please use rock paper or scissors');
-    }
+        const playerPick = generateUserPick(parseInt(e.target.dataset.id));
+        setTimeout(() => {
+            const compPick = generateCompPick();
+            playRound(playerPick, compPick);
+        }, 1000)
+        
+    });
 }
 
-function computerPlay() {
+const generateUserPick = (playerPick) => playerPick === 1 ? 'rock' : playerPick === 2 ? 'paper' : 'scissors'; 
+
+const generateCompPick = () => {
     const randomNum = Math.floor(Math.random() * 3) + 1
     return randomNum === 1 ? 'rock' : randomNum === 2 ? 'paper' : 'scissors';
-}
+};
 
-function playRound(playerSelection, computerSelection) {
+const playRound = (playerPick, compPick) => {
 
-    const losingMessage = `You have lost! ${computerSelection} beats ${playerSelection}`;
-    const winningMessage = `You have won! ${playerSelection} beats ${computerSelection}`;
-    const tiedMessage = `The game was a tie! ${playerSelection} and ${computerSelection}, try again`;
+    const losingMessage = `You have lost! ${compPick} beats ${playerPick}`;
+    const winningMessage = `You have won! ${playerPick} beats ${compPick}`;
+    const tiedMessage = `The game was a tie! Both picked ${playerPick}, try again`;
+    const results = document.querySelector('.results');
     
 
-    if (playerSelection === 'rock') {
-        if (computerSelection === 'scissors') {
-            document.querySelector('.results').textContent = winningMessage;
-            userScore += 1;
-            console.log(userScore)
+    if (playerPick === 'rock') {
+        if (compPick === 'scissors') {
+            results.textContent = winningMessage;
+            storage.userScore += 1;
+            console.log(storage.userScore)
             
-        } else if (computerSelection === 'paper') {
-            document.querySelector('.results').textContent = losingMessage;
-            computerScore += 1;
-        } else if (computerSelection === 'rock') {
-            document.querySelector('.results').textContent = tiedMessage;
+        } else if (compPick === 'paper') {
+            results.textContent = losingMessage;
+            storage.computerScore += 1;
+        } else if (compPick === 'rock') {
+            results.textContent = tiedMessage;
         }
-    } else if (playerSelection === 'scissors') {
-        if (computerSelection === 'rock') {
-            document.querySelector('.results').textContent = losingMessage;
-            computerScore += 1;
-        } else if (computerSelection === 'paper') {
-            document.querySelector('.results').textContent = winningMessage;
-            userScore += 1
-        } else if (computerSelection === 'scissors') {
-            document.querySelector('.results').textContent = tiedMessage;
+    } else if (playerPick === 'scissors') {
+        if (compPick === 'rock') {
+            results.textContent = losingMessage;
+            storage.computerScore += 1;
+        } else if (compPick === 'paper') {
+            results.textContent = winningMessage;
+            storage.userScore += 1
+        } else if (compPick === 'scissors') {
+            results.textContent = tiedMessage;
         }
-    } else if (playerSelection === 'paper') {
-        if (computerSelection === 'rock') {
-            document.querySelector('.results').textContent = winningMessage;
-            userScore += 1;
-        } else if (computerSelection === 'scissors') {
-            document.querySelector('.results').textContent = losingMessage;
-            computerScore += 1;
-        } else if (computerSelection === 'paper') {
-            document.querySelector('.results').textContent = tiedMessage;
+    } else if (playerPick === 'paper') {
+        if (compPick === 'rock') {
+            results.textContent = winningMessage;
+            storage.userScore += 1;
+        } else if (compPick === 'scissors') {
+            results.textContent = losingMessage;
+            storage.computerScore += 1;
+        } else if (compPick === 'paper') {
+            results.textContent = tiedMessage;
         }
     }
 
     checkWinner();
 
-}
+};
 
 function checkWinner() {
-    let winner = userScore > 4 ? 'User!' : 'Computer!'
-    const finalWinnerMessage = `You have won the the best of 5 ${winner}! Game has ended`
+    let winner = storage.userScore > 4 ? storage.playerName : 'Computer!'
+    const finalWinnerMessage = `You have won the game ${winner}! Game has ended`
     const para1 = document.createElement('p');
     const para2 = document.createElement('p');
 
-    para1.textContent = `Player Score ${userScore}`;
-    para2.textContent = `Computer Score ${computerScore}`;
+    para1.textContent = `Player Score ${storage.userScore}`;
+    para2.textContent = `Computer Score ${storage.computerScore}`;
 
-    results.appendChild(para1);
-    results.appendChild(para2);
+    storage.results.appendChild(para1);
+    storage.results.appendChild(para2);
 
-    if (userScore > 4 ){
+    if (storage.userScore > 4 ){
         document.querySelector('.results').textContent = finalWinnerMessage;
-    } else if (computerScore > 4){
+    } else if (storage.computerScore > 4){
         document.querySelector('.results').textContent = finalWinnerMessage;
     }
     
-}
+};
+
+storage.form.addEventListener('submit', ShowUI);
